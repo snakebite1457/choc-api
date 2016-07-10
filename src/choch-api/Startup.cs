@@ -52,6 +52,10 @@ namespace choch_api
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
 
+            services.AddCors(options => options.AddPolicy("AllowAll", p => p.AllowAnyOrigin()
+                                                                        .AllowAnyMethod()
+                                                                         .AllowAnyHeader()));     
+
             services.AddMvc();
 
         }
@@ -72,6 +76,8 @@ namespace choch_api
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
+            app.UseCors("AllowAll");
 
             app.UseApplicationInsightsRequestTelemetry();
 
@@ -119,6 +125,8 @@ namespace choch_api
                 Issuer = "ExampleIssuer",
                 SigningCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256),
             };
+
+            
 
             app.UseMiddleware<TokenProviderMiddleware>(Options.Create(options));
 

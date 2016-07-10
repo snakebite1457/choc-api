@@ -39,8 +39,7 @@ namespace choch_api.Util
             }
 
             // Request must be POST with Content-Type: application/x-www-form-urlencoded
-            if (!context.Request.Method.Equals("POST")
-               || !context.Request.HasFormContentType)
+            if (!context.Request.Method.Equals("POST"))
             {
                 context.Response.StatusCode = 400;
                 return context.Response.WriteAsync("Bad request.");
@@ -59,7 +58,7 @@ namespace choch_api.Util
             if (!validation.Succeeded)
             {
                 context.Response.StatusCode = StatusCodes.Status400BadRequest;
-                await context.Response.WriteAsync("User hat to be authenticated");
+                await context.Response.WriteAsync("User has to be authenticated");
                 return;
             }
 
