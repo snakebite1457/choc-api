@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Principal;
 using System.Threading.Tasks;
 using choch_api.Models;
 using Microsoft.AspNetCore.Http;
@@ -15,8 +14,8 @@ namespace choch_api.Util
     {
         private readonly RequestDelegate _next;
         private readonly TokenProviderOptions _options;
-        private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<User> _userManager;
 
         public TokenProviderMiddleware(
             RequestDelegate next,
@@ -66,7 +65,7 @@ namespace choch_api.Util
 
             // Specifically add the jti (random nonce), iat (issued timestamp), and sub (subject/user) claims.
             // You can add other claims here, if you want:
-            var claims = new Claim[]
+            var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, username),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
@@ -86,12 +85,14 @@ namespace choch_api.Util
             var response = new
             {
                 access_token = encodedJwt,
-                expires_in = (int)_options.Expiration.TotalSeconds
+                expires_in = (int) _options.Expiration.TotalSeconds
             };
 
             // Serialize and return the response
             context.Response.ContentType = "application/json";
-            await context.Response.WriteAsync(JsonConvert.SerializeObject(response, new JsonSerializerSettings { Formatting = Formatting.Indented }));
+            await
+                context.Response.WriteAsync(JsonConvert.SerializeObject(response,
+                    new JsonSerializerSettings {Formatting = Formatting.Indented}));
         }
     }
 }

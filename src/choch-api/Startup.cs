@@ -88,7 +88,7 @@ namespace choch_api
             app.UseIdentity();
 
             // secretKey contains a secret passphrase only your server knows
-            var secretKey = "mysupersecret_secretkey!123";
+            var secretKey = Configuration.GetConnectionString("ServerSecret");
             var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey));
 
             var tokenValidationParameters = new TokenValidationParameters
@@ -99,11 +99,11 @@ namespace choch_api
 
                 // Validate the JWT Issuer (iss) claim
                 ValidateIssuer = true,
-                ValidIssuer = "ExampleIssuer",
+                ValidIssuer = Configuration.GetConnectionString("ValidIssuer"),
 
                 // Validate the JWT Audience (aud) claim
                 ValidateAudience = true,
-                ValidAudience = "ExampleAudience",
+                ValidAudience = Configuration.GetConnectionString("ValidAudience"),
 
                 // Validate the token expiry
                 ValidateLifetime = true,
